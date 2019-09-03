@@ -1,0 +1,250 @@
+{
+  "name": "@zowe/zowe-cli-zos-make-plugin",
+  "version": "1.0.0",
+  "description": "A Zowe CLI plugin for building source on z/OS using make.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zowe/zowe-cli-sample-plugin.git"
+  },
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "node scripts/updateLicense.js && tsc --pretty && npm run checkTestsCompile",
+    "checkTestsCompile": "echo \"Checking that test source compiles...\" && tsc --project __tests__/test-tsconfig.json --noEmit ",
+    "prebuild": "npm run clean && npm run lint && echo Using TypeScript && tsc --version",
+    "clean": "rimraf lib",
+    "watch": "tsc --pretty --watch",
+    "prepublishOnly": "npm run build",
+    "lint": "tslint \"src/**/*.ts\"",
+    "test": "npm run test:unit && npm run test:integration && npm run test:system",
+    "test:system": "env-cmd __tests__/__resources__/env/system.env jest .*/__system__/.* --coverage false",
+    "test:integration": "env-cmd __tests__/__resources__/env/integration.env jest .*/__integration__/.* --coverage false",
+    "test:unit": "env-cmd __tests__/__resources__/env/unit.env jest --coverage --testPathIgnorePatterns \".*/__system__|__integration__/.*\"",
+    "installPlugin": "npm install && npm run clean && npm run build && zowe plugins install ."
+  },
+  "imperative": {
+    "name": "zos-make",
+    "productDisplayName": "zos-make plugin",
+    "pluginSummary": "Build your local source on z/OS with make",
+    "pluginAliases": [
+      "zm"
+    ],
+    "pluginHealthCheck": "./lib/health.handler",
+    "rootCommandDescription": "Create and build a local z/OS project (C/C++, COBOL, HLASM, etc.) with make on USS!\n\nStart with the built-in samples:\n1) zowe zm init\n2) Make source changes locally!\n3) zowe zm upload\n4) zowe zm make\n\nThe z/OS make plugin's 'zowe zm init' command will create a 'zos-make.json' properties file in the local directory, copy a sample makefile, and sample source. The properties file controls the behavior of z/OS make and allows you to customize your project and build.",
+    "definitions": [
+      {
+        "name": "init",
+        "summary": "Create a z/OS make project",
+        "description": "Initialize the project",
+        "type": "command",
+        "handler": "./lib/cli/init.handler",
+        "options": [
+          {
+            "name": "overwrite",
+            "aliases": [
+              "o"
+            ],
+            "description": "If a properties file exists in the local directory, overwrite it with the one generated from init.",
+            "type": "boolean",
+            "required": false,
+            "defaultValue": false
+          }
+        ]
+      },
+      {
+        "name": "setup",
+        "summary": "Setup the z/OS project environment",
+        "description": "Setup the project directories and data sets on z/OS.",
+        "type": "command",
+        "handler": "./lib/cli/setup.handler"
+      },
+      {
+        "name": "upload",
+        "summary": "Upload local source to z/OS",
+        "description": "Upload the local source to z/OS for make.",
+        "type": "command",
+        "handler": "./lib/cli/upload.handler",
+        "options": [
+          {
+            "name": "src-files",
+            "aliases": [
+              "f"
+            ],
+            "description": "The name of the source files to upload.",
+            "type": "array",
+            "required": false
+          }
+        ]
+      },
+      {
+        "name": "make",
+        "summary": "Build your project on z/OS with make",
+        "description": "Build your project on z/OS with make",
+        "type": "command",
+        "handler": "./lib/cli/make.handler",
+        "positionals": [
+          {
+            "name": "makeparms",
+            "description": "Pass additional parameters to the 'make' command as 'make <make-parms>'. This option will override the value set in your 'zos-make.json' properties.",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "options": [
+          {
+            "name": "copy",
+            "aliases": [
+              "c"
+            ],
+            "description": "If make exits with a status code of 0 and you have specified the 'copy' property in your zos-make.json, copies files from USS to data-sets according to the 'copy' property.",
+            "type": "boolean",
+            "required": false,
+            "defaultValue": false
+          }
+        ]
+      },
+      {
+        "name": "watch",
+        "summary": "Watch source for changes and build",
+        "description": "Watches files for changes, uploads, and builds.",
+        "type": "command",
+        "handler": "./lib/cli/watch.handler",
+        "options": [
+          {
+            "name": "wrap",
+            "aliases": [
+              "w"
+            ],
+            "description": "Specifies the column to wrap the console output. Simply for display purposes.",
+            "type": "number",
+            "required": false,
+            "defaultValue": 120
+          },
+          {
+            "name": "copy",
+            "aliases": [
+              "c"
+            ],
+            "description": "If make exits with a status code of 0 and you have specified the 'copy' property in your zos-make.json, copies files from USS to data-sets according to the 'copy' property.",
+            "type": "boolean",
+            "required": false,
+            "defaultValue": false
+          },
+          {
+            "name": "make-parms",
+            "aliases": [
+              "mp"
+            ],
+            "description": "Pass additional parameters to the 'make' command as 'make <make-parms>'. This option will override the value set in your 'zos-make.json' properties.",
+            "required": false,
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "name": "cleanup",
+        "summary": "Cleanup the remote z/OS environment",
+        "description": "Cleans up the z/OS environment by umounting the ZFS, deleting the ZFS, etc.",
+        "type": "command",
+        "handler": "./lib/cli/cleanup.handler",
+        "options": [
+          {
+            "name": "for-sure",
+            "aliases": [
+              "f"
+            ],
+            "description": "Cleanup is a destructive command that will permenantly delete all project data-sets and files. You must set this option to confirm cleanup.",
+            "type": "boolean",
+            "required": true
+          }
+        ]
+      }
+    ]
+  },
+  "dependencies": {
+    "chokidar": "^3.0.0",
+    "handlebars": "^4.1.2",
+    "mkdirp": "^0.5.1"
+  },
+  "peerDependencies": {
+    "@zowe/cli": "^5.5.0",
+    "@zowe/imperative": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^8.0.0",
+    "@types/jest": "^20.0.5",
+    "@types/node": "^8.0.0",
+    "@types/yargs": "8.0.2",
+    "@zowe/cli": "^5.5.0",
+    "@zowe/imperative": "^4.0.0",
+    "env-cmd": "^8.0.2",
+    "fs-extra": "^5.0.0",
+    "jest": "^24.3.1",
+    "jest-cli": "^24.3.1",
+    "jest-environment-node": "^24.3.1",
+    "jest-environment-node-debug": "^2.0.0",
+    "jest-html-reporter": "^2.2.0",
+    "jest-junit": "^3.6.0",
+    "jest-stare": "^1.0.5",
+    "rimraf": "^2.6.3",
+    "ts-jest": "^24.0.0",
+    "ts-node": "^3.2.0",
+    "tslint": "^5.0.0",
+    "typedoc": "^0.15.0",
+    "typescript": "3.2.2",
+    "uuid": "^3.2.1",
+    "word-wrap": "^1.2.3"
+  },
+  "jest": {
+    "modulePathIgnorePatterns": [
+      "__tests__/__snapshots__/"
+    ],
+    "testResultsProcessor": "jest-stare",
+    "transform": {
+      ".(ts)": "ts-jest"
+    },
+    "testRegex": "(test|spec)\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/__tests__/__results__"
+    ],
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.ts",
+      "!**/__tests__/**",
+      "!**/index.ts",
+      "!**/main.ts"
+    ],
+    "collectCoverage": false,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "cobertura"
+    ],
+    "coverageDirectory": "<rootDir>/__tests__/__results__/unit/coverage"
+  },
+  "jest-stare": {
+    "resultDir": "__tests__/__results__/jest-stare",
+    "additionalResultsProcessors": [
+      "jest-junit",
+      "jest-html-reporter"
+    ],
+    "coverageLink": "../coverage/lcov-report/index.html"
+  },
+  "jest-junit": {
+    "output": "__tests__/__results__/junit.xml"
+  },
+  "jest-html-reporter": {
+    "pageTitle": "Zowe CLI Sample Plugin Test Results",
+    "outputPath": "__tests__/__results__/results.html",
+    "includeFailureMsg": true
+  },
+  "author": "Jason Tucker",
+  "license": "EPL-2.0"
+}
