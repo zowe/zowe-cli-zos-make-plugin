@@ -43,7 +43,7 @@ If requested, `zowe zm init` will copy an example `makefile` and example HLASM/C
 
 ## Making Code Changes
 
-Use `zowe zm watch` to upload and `make` as files are changed in your `localSrcDir`. This is the fastest and most seemless way to build your source as you code.
+Use `zowe zm watch` to upload and `make` as files are changed in your `localSrcDir`. This is the fastest and most seamless way to build your source as you code.
 
 Use the `--copy` option on `zowe zm watch` to have executables (load modules) copied to your LOADLIB after make completes with a exit code of 0.
 
