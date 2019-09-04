@@ -41,13 +41,13 @@ Step | Command/Action | Description
 
 If requested, `zowe zm init` will copy an example `makefile` and example HLASM/C source files to get you started.
 
-### Making Code Changes
+## Making Code Changes
 
 Use `zowe zm watch` to upload and `make` as files are changed in your `localSrcDir`. This is the fastest and most seemless way to build your source as you code.
 
 Use the `--copy` option on `zowe zm watch` to have executables (load modules) copied to your LOADLIB after make completes with a exit code of 0.
 
-### Viewing Listings
+## Viewing Listings
 If you have configured the `remoteListingsDir` in your `zos-make.json` to point to the directory where the `makefile` commands place listings, the plugin will automatically download them after a build (`zowe zm make` or `zowe zm watch`). Listings are downloaded to a time/date stamped directory in the `<localOutDir>/listings` directory. 
 
 For example, if you choose to copy the sample `makefile` during `zowe zm init`, the commands in the `makefile` place the listings in `<remoteProjectDir>/out/listings`:
@@ -61,7 +61,7 @@ $(OUTPUTDIR)/sample.o: $(ASMSOURCE)/sample.asm
 ```
 The `remoteListingsDir` property is set to the relative directory `out/listings`. When a build completes, the plugin will automatically download listings in `<remoteProjectDir>/out/listings` to `<localOutDir>/listings` (in a date/time stamped folder). The plugin keeps a default of 5 local listing directories (this is configurable).
 
-### Copying modules to a LOADLIB
+## Copying modules to a LOADLIB
 You can instruct the plugin to create data sets during `zowe zm setup` by specifying an array of their attributes on the `dataSets` property in your `zos-make.json`. During `zowe zm init`, you'll be asked if you would like to create a LOADLIB (defaults to Y - yes). If you choose to create a LOADLIB, an additional property will be added to your `zos-make.json` config:
 ```
   "copy": [
@@ -77,7 +77,7 @@ Additionally, you can specify any remote project directory and any compatible da
 
 The `copy` property is convenient, but you can also direct the commands in your `makefile` to output directly to data-sets. 
 
-### Cleaning up 
+## Cleaning up 
 
 Use `zowe zm cleanup` to cleanup z/OS environment when you're finished coding. This is a destructive command that will delete the ZFS and other data-sets specified in your `zos-make.json` config. Be aware of what you have specified. 
 
