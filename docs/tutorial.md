@@ -1,6 +1,14 @@
 # Zos Make Plugin Tutorial
 This is an in-depth step-by-step tutorial that explains the plugin and the process of creating a project.
 
+1. [Starting a Project](#starting-a-project)
+2. [zowe zm init](#zowe-zm-init)
+3. [zos-make.json](#zos-make-json)
+4. [zowe zm setup](#zowe-zm-setup)
+5. [zowe zm upload](#zowe-zm-upload)
+6. [zowe zm make](#zowe-zm-make)
+7. [zowe zm watch](#zowe-zm-watch)
+
 ## Starting a Project
 Once you have the plugin installed. Create a blank directory on your local PC. In this example, we'll create a directory called `zmt`:
 
