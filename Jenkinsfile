@@ -75,31 +75,31 @@ node('ca-jenkins-agent') {
     def UNIT_JUNIT_OUTPUT = "$UNIT_TEST_ROOT/junit.xml"
 
     // Perform a unit test and capture the results
-    // pipeline.test(
-    //     name: "Unit",
-    //     operation: {
-    //         sh "npm run test:unit"
-    //     },
-    //     testResults: [dir: "${UNIT_TEST_ROOT}/jest-stare", files: "index.html", name: "${PRODUCT_NAME} - Unit Test Report"],
-    //     coverageResults: [dir: "__tests__/__results__/unit/coverage/lcov-report", files: "index.html", name: "${PRODUCT_NAME} - Unit Test Coverage Report"],
-    //     junitOutput: UNIT_JUNIT_OUTPUT,
-    //     cobertura: [
-    //         autoUpdateHealth: false,
-    //         autoUpdateStability: false,
-    //         coberturaReportFile: '__tests__/__results__/unit/coverage/cobertura-coverage.xml',
-    //         classCoverageTargets: '85, 80, 45',
-    //         conditionalCoverageTargets: '70, 65, 50',
-    //         failUnhealthy: false,
-    //         failUnstable: false,
-    //         fileCoverageTargets: '85, 80, 45',
-    //         lineCoverageTargets: '80, 70, 50',
-    //         maxNumberOfBuilds: 20,
-    //         methodCoverageTargets: '80, 70, 50',
-    //         onlyStable: false,
-    //         sourceEncoding: 'ASCII',
-    //         zoomCoverageChart: false
-    //     ]
-    // )
+    pipeline.test(
+        name: "Unit",
+        operation: {
+            sh "npm run test:unit"
+        },
+        testResults: [dir: "${UNIT_TEST_ROOT}/jest-stare", files: "index.html", name: "${PRODUCT_NAME} - Unit Test Report"],
+        coverageResults: [dir: "__tests__/__results__/unit/coverage/lcov-report", files: "index.html", name: "${PRODUCT_NAME} - Unit Test Coverage Report"],
+        junitOutput: UNIT_JUNIT_OUTPUT,
+        cobertura: [
+            autoUpdateHealth: false,
+            autoUpdateStability: false,
+            coberturaReportFile: '__tests__/__results__/unit/coverage/cobertura-coverage.xml',
+            classCoverageTargets: '85, 80, 0',
+            conditionalCoverageTargets: '70, 65, 0',
+            failUnhealthy: false,
+            failUnstable: false,
+            fileCoverageTargets: '85, 80, 0',
+            lineCoverageTargets: '80, 70, 0',
+            maxNumberOfBuilds: 20,
+            methodCoverageTargets: '80, 70, 0',
+            onlyStable: false,
+            sourceEncoding: 'ASCII',
+            zoomCoverageChart: false
+        ]
+    )
 
      def INTEGRATION_TEST_ROOT= "__tests__/__results__/integration"
      def INTEGRATION_JUNIT_OUTPUT = "$INTEGRATION_TEST_ROOT/junit.xml"
