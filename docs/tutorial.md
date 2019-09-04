@@ -23,7 +23,7 @@ jason@jason-VirtualBox:~/projects/mainframe$ cd zmt
 jason@jason-VirtualBox:~/projects/mainframe/zmt$ 
 ```
 
-### zowe zm init
+## zowe zm init
 Once the directory has been created, we can initialize the project with the `zowe zm init` command:
 
 ```
@@ -77,7 +77,7 @@ drwxr-xr-x 2 jason jason 4096 Sep  3 11:08 metalc
 
 In addition, in the root of the project it created a `zos-make-out/` directory, which will contain listings, etc. after builds.
 
-#### zos-make.json
+## zos-make.json
 `zowe zm init` created the following properties based on the questions:
 ```
 jason@jason-VirtualBox:~/projects/mainframe/zmt$ cat zos-make.json 
@@ -121,7 +121,7 @@ See [IZosMakeProperties.ts](../src/api/interfaces/IZosMakeProperties.ts) for a f
 
 There is no need to customize the properties further, the defaults, etc. are fine. 
 
-### zowe zm setup
+## zowe zm setup
 The setup command uses the project properties (`zos-make.json`) to create the project workspace on USS:
 ```
 jason@jason-VirtualBox:~/projects/mainframe/zmt$ zowe zm setup
@@ -166,7 +166,7 @@ drwxr-xr-x   4 JASON    ESDGRP      8192 Sep  3 11:15 out
 bash-4.2$ 
 ```
 
-### zowe zm upload
+## zowe zm upload
 Now we can upload our source with `zowe zm upload`:
 ```
 jason@jason-VirtualBox:~/projects/mainframe/zmt$ zowe zm upload
@@ -175,7 +175,7 @@ All source files uploaded.
 
 All files from `localSrcDir` (`zos-make-src/`) are now uploaded to `<remoteProjectRoot>/src` (`/z/jason/zmt/src`). 
 
-### zowe zm make
+## zowe zm make
 Now that our source has been uploaded, we can build with `zowe zm make`:
 ```
 jason@jason-VirtualBox:~/projects/mainframe/zmt$ zowe zm make
@@ -227,7 +227,7 @@ drwxr-xr-x 3 jason jason   4096 Sep  3 11:30 ..
 
 ```
 
-### zowe zm watch
+## zowe zm watch
 To make code changes, you can use `zowe zm watch --copy`. The command watches for changes to files and directories in `localSrcDir` (`zos-make-src/`). When a change is detected (e.g. file saved), the file is uploaded and `make` is run:
 ```
 jason@jason-VirtualBox:~/projects/mainframe/zmt$ zowe zm watch --copy
@@ -294,7 +294,7 @@ jason@jason-VirtualBox:~/projects/mainframe/zmt$ zowe zm watch --copy
 [ZM-COPY] "2" file(s) copied to "JASON.PUBLIC.ZMT.ZOSMAKE.LOADLIB".
 ```
 
-### zowe zm cleanup
+## zowe zm cleanup
 When we are finished with our changes, we can cleanup the z/OS workspace with `zowe zm cleanup`:
 ```
 jason@jason-VirtualBox:~/projects/mainframe/zmt$ zowe zm cleanup -c
