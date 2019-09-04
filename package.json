@@ -6,6 +6,9 @@
     "type": "git",
     "url": "https://github.com/zowe/zowe-cli-sample-plugin.git"
   },
+  "publishConfig": {
+    "registry": "https://gizaartifactory.jfrog.io/gizaartifactory/api/npm/npm-local-release/"
+  },
   "main": "lib/index.js",
   "files": [
     "lib"
@@ -19,9 +22,9 @@
     "prepublishOnly": "npm run build",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "npm run test:unit && npm run test:integration && npm run test:system",
-    "test:system": "env-cmd __tests__/__resources__/env/system.env jest .*/__system__/.* --coverage false || exit 0",
-    "test:integration": "env-cmd __tests__/__resources__/env/integration.env jest .*/__integration__/.* --coverage false || exit 0",
-    "test:unit": "env-cmd __tests__/__resources__/env/unit.env jest --coverage --testPathIgnorePatterns \".*/__system__|__integration__/.*\" || exit 0",
+    "test:system": "env-cmd __tests__/__resources__/env/system.env jest .*/__system__/.* --coverage false",
+    "test:integration": "env-cmd __tests__/__resources__/env/integration.env jest .*/__integration__/.* --coverage false",
+    "test:unit": "env-cmd __tests__/__resources__/env/unit.env jest --coverage --testPathIgnorePatterns \".*/__system__|__integration__/.*\"",
     "installPlugin": "npm install && npm run clean && npm run build && zowe plugins install ."
   },
   "imperative": {
