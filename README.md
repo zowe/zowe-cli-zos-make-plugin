@@ -4,7 +4,7 @@ Use case: I have mainframe source code (C/C++, HLASM, COBOL, etc.) off platform 
 
 ## Overview
 
-The z/OS make plugin manages the details of creating a USS workspace (ZFS and directories) and allows you to build your project source (HLASM, C/C++, COBOL, PLI, etc.) on USS with `make` with your custom `makefile`. The plugin strives to emulate a local build experience by automating and hiding mainframe details allowing you to focus on writing code. 
+The z/OS make plugin manages the details of creating a USS workspace (ZFS and directories) and allows you to build your project source (HLASM, C/C++, COBOL, PLI, etc.) on USS with `make` using your custom `makefile`. The plugin strives to emulate a local build experience by automating and hiding mainframe details allowing you to focus on writing code. 
 
 The plugin is "project centric". Meaning, you create and customize (via the `zowe zm init` command) a `zos-make.json` properties file that describes some simple details for each project (e.g. the remote USS directory to use for the project).
 
