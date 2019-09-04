@@ -181,7 +181,7 @@
     "@types/node": "^8.0.0",
     "@types/yargs": "8.0.2",
     "@zowe/cli": "^5.5.0",
-    "@zowe/imperative": "^4.0.0",
+    "@zowe/imperative": "4.3.2",
     "env-cmd": "^8.0.2",
     "fs-extra": "^5.0.0",
     "jest": "^24.3.1",
