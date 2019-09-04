@@ -15,6 +15,29 @@ import { DataSet } from "./DataSet";
 import * as path from "path";
 
 export class Uss {
+
+    // List of directories that should never be rm. Used as a "just in case" check
+    public static INVALID_RM_DIRS: string[] = [
+        "",
+        "/",
+        "/bin",
+        "/boot",
+        "/dev",
+        "/etc",
+        "/tmp",
+        "/sys",
+        "/lib",
+        "/opt",
+        "/root",
+        "/proc",
+        "/sbin",
+        "/usr",
+        "/usr/doc",
+        "/usr/info",
+        "/usr/lib",
+        "/var"
+    ];
+
     /**
      * Submits a the mkdir -p command to create a USS directory. The directory
      * is expected to be the absolute path.
@@ -70,6 +93,7 @@ export class Uss {
      */
     public static async rmFilesInDir(zosmfSession: ZosmfSession, dir: string) {
         const lsDir: string = Uss.dirUrl(dir);
+        Uss.checkDoNotDelete(lsDir);
         const response: IZosFilesResponse = await List.fileList(zosmfSession as any, lsDir);
         if (response.success !== true) {
             throw new ImperativeError({ msg: `USS ls failed.`, additionalDetails: response.commandResponse });
@@ -80,6 +104,19 @@ export class Uss {
                 await Delete.ussFile(zosmfSession as any, rmpath, false);
             }
         }
+    }
+
+    /**
+     * As a saftey/sanity check, we'll make sure that a request to delete an
+     * "important" directory is never made.
+     * @param dir Directory with no trailing slash
+     */
+    public static checkDoNotDelete(dir: string) {
+        Uss.INVALID_RM_DIRS.forEach((invalid) => {
+            if (dir.trim() === invalid) {
+                throw new ImperativeError({msg: `Will not remove directory: "${dir}"`});
+            }
+        });
     }
 
     /**

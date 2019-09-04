@@ -115,7 +115,7 @@ export default class InitHandler implements ICommandHandler {
                 localOutDir,
                 remoteProjectRoot: remoteProjectDir,
                 zfs: {
-                    name: `${dataSetHLQ.toUpperCase()}.PUBLIC.ZOSMAKE.ZFS`,
+                    name: `${dataSetHLQ.toUpperCase()}.${Defaults.ZFS_ATTRIBUTES.name}`,
                     cylsPri: (zfsSize.trim() === "") ? parseInt(zfsSizeDefault, 10) : parseInt(zfsSize, 10),
                     volumes: (zfsVolumes.trim() === "") ? undefined : zfsVolumes.toUpperCase().split(" ")
                 },
