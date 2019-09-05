@@ -169,6 +169,7 @@
   "dependencies": {
     "chokidar": "^3.0.0",
     "handlebars": "^4.1.2",
+    "rimraf": "^2.6.3",
     "mkdirp": "^0.5.1"
   },
   "peerDependencies": {
@@ -191,7 +192,6 @@
     "jest-html-reporter": "^2.2.0",
     "jest-junit": "^3.6.0",
     "jest-stare": "^1.0.5",
-    "rimraf": "^2.6.3",
     "ts-jest": "^24.0.0",
     "ts-node": "^3.2.0",
     "tslint": "^5.0.0",
