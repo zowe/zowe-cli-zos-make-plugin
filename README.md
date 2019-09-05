@@ -10,6 +10,11 @@ The plugin is "project centric". Meaning, you create and customize (via the `zow
 
 To get started, read through the README and checkout a detailed walkthrough in the [tutorial](./docs/tutorial.md).
 
+You can install the plugin from npm using:
+```
+zowe plugins install @zowe/zos-make-for-zowe-cli@latest
+```
+
 ## Building and Installing the zos-make Plugin from Source
 After you've cloned this project, navigate to the project directory and perform the following:
 1. `npm install`
