@@ -11,7 +11,8 @@
   },
   "main": "lib/index.js",
   "files": [
-    "lib"
+    "lib",
+    "templates"
   ],
   "scripts": {
     "build": "node scripts/updateLicense.js && tsc --pretty && npm run checkTestsCompile",
