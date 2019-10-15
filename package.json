@@ -108,12 +108,12 @@
             "defaultValue": false
           },
           {
-            "name": "max-concurrent",
+            "name": "max-concurrent-listings",
             "type": "number",
             "aliases": [
-              "mc"
+              "mcl"
             ],
-            "description": "If listings are downloaded, control the max concurrent downloads. A higher value may cause additional TSO address spaces to be spawned. Set this to 0 to allow all listings to be downloaded concurrently.",
+            "description": "If listings are downloaded, control the max concurrent downloads. A higher value (or 0) may cause additional TSO address spaces to be spawned. Set this to 0 to allow all listings to be downloaded concurrently.",
             "required": false
           }
         ]

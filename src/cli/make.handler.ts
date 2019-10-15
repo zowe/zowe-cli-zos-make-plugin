@@ -35,7 +35,7 @@ export default class MakeHandler implements ICommandHandler {
     public process(params: IHandlerParameters): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.mMakeParms = params.arguments.makeparms;
-            this.mMaxConcurrent = params.arguments.maxConcurrent;
+            this.mMaxConcurrent = params.arguments.maxConcurrentListings;
             this.performMake(params).then(() => {
                 resolve();
             }).catch((err) => {
