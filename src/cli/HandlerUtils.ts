@@ -33,7 +33,7 @@ export class HandlerUtils {
      * @param makeParms Any additional parameters for make.
      */
     public static async make(zosmfSession: ZosmfSession, sshSession: SshSession, makeTxtWrap: number,
-                             response: IHandlerResponseApi["console"], makeParms?: string): Promise<number> {
+                             response: IHandlerResponseApi["console"], makeParms?: string, maxConcurrent?: number): Promise<number> {
 
         // Check if its mounted.
         if (!(await Zfs.isMounted(zosmfSession, Properties.get.zfs.name, Properties.get.remoteProjectRoot))) {
@@ -67,7 +67,7 @@ export class HandlerUtils {
             Files.cleanOldLocalListings((Properties.get.keepListings != null) ?
                 Properties.get.keepListings : Files.DEFAULT_LISTINGS_KEEP);
             await Uss.cpDirToLocal(zosmfSession, Files.buildRemoteProjectDir(Properties.get.remoteListingsDir), outputDir);
-            response.log(`${MsgConstants.tagZmList} Listings: "${outputDir}"`);
+            response.log(`${MsgConstants.tagZmList} Listings: "${outputDir}"`, maxConcurrent);
         }
 
         return rc;

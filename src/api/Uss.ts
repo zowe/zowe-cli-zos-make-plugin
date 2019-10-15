@@ -13,8 +13,11 @@ import { SshSession, Shell, ZosmfSession, List, IZosFilesResponse, Delete, Downl
 import { ImperativeError } from "@zowe/imperative";
 import { DataSet } from "./DataSet";
 import * as path from "path";
+import { Utils } from "./Utils";
 
 export class Uss {
+    // Hard coded max to speed up the retrieve, but not overload with TSO address spaces
+    public static MaxConcurrentDownloads: number = 6;
 
     // List of directories that should never be rm. Used as a "just in case" check
     public static INVALID_RM_DIRS: string[] = [
@@ -60,19 +63,38 @@ export class Uss {
      * @param session The z/OSMF session object for the API.
      * @param remoteDir The remote USS directory containing the the files.
      * @param localDir The local directory to copy the files.
+     * @param maxConcurrent The max number of concurrent downloads for the listings.
      */
-    public static async cpDirToLocal(session: ZosmfSession, remoteDir: string, localDir: string) {
+    public static async cpDirToLocal(session: ZosmfSession, remoteDir: string, localDir: string, maxConcurrent = Uss.MaxConcurrentDownloads) {
         const lsDir: string = Uss.dirUrl(remoteDir);
         const response: IZosFilesResponse = await List.fileList(session as any, lsDir);
         if (response.success !== true) {
             throw new ImperativeError({ msg: `USS ls failed.`, additionalDetails: response.commandResponse });
         }
+
+        // Build a list of listing files to download
+        const listings: any[] = [];
         for (const entry of response.apiResponse.items) {
             if (entry.mode.startsWith("-")) {
                 const remotePath: string = path.posix.normalize(`${lsDir}/${entry.name}`);
                 const localPath: string = path.join(localDir, entry.name);
-                await Download.ussFile(session as any, remotePath, { file: localPath });
+                listings.push({
+                    remotePath,
+                    localPath
+                });
             }
+        }
+
+        // Function to create the download promise for asyncPool
+        const dlPromise = (dl: { remotePath: string, localPath: string }) => {
+            return Download.ussFile(session as any, dl.remotePath, { file: dl.localPath });
+        };
+
+        // Await the download pool
+        if (maxConcurrent === 0) {
+            await Promise.all(listings.map(dlPromise));
+        } else {
+            await Utils.asyncPool(maxConcurrent, listings, dlPromise);
         }
     }
 
