@@ -106,6 +106,15 @@
             "type": "boolean",
             "required": false,
             "defaultValue": false
+          },
+          {
+            "name": "max-concurrent",
+            "type": "number",
+            "aliases": [
+              "mc"
+            ],
+            "description": "If listings are downloaded, control the max concurrent downloads. A higher value may cause additional TSO address spaces to be spawned. Set this to 0 to allow all listings to be downloaded concurrently.",
+            "required": false
           }
         ]
       },
@@ -169,9 +178,9 @@
   },
   "dependencies": {
     "chokidar": "^3.0.0",
-    "handlebars": "^4.1.2",
-    "rimraf": "^2.6.3",
+    "handlebars": "^4.4.3",
     "mkdirp": "^0.5.1",
+    "rimraf": "^2.6.3",
     "word-wrap": "^1.2.3"
   },
   "peerDependencies": {

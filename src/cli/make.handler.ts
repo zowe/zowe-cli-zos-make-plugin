@@ -25,6 +25,9 @@ export default class MakeHandler implements ICommandHandler {
     // Additional parameters for make passed from the commandline.
     private mMakeParms: string;
 
+    // Set the max concurrent downloads for listings
+    private mMaxConcurrent: number;
+
     /**
      * Uses the SSH capabilities to submit make and get the response.
      * @param params handler parameters from imperative
@@ -32,6 +35,7 @@ export default class MakeHandler implements ICommandHandler {
     public process(params: IHandlerParameters): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             this.mMakeParms = params.arguments.makeparms;
+            this.mMaxConcurrent = params.arguments.maxConcurrent;
             this.performMake(params).then(() => {
                 resolve();
             }).catch((err) => {
@@ -58,7 +62,7 @@ export default class MakeHandler implements ICommandHandler {
         const sshSession = SshSession.createBasicSshSession(sshLoadResp.profile);
 
         // Perform make
-        const rc = await HandlerUtils.make(zosmfSession, sshSession, this.mWrap, params.response.console, this.mMakeParms);
+        const rc = await HandlerUtils.make(zosmfSession, sshSession, this.mWrap, params.response.console, this.mMakeParms, this.mMaxConcurrent);
 
         // Throw an error if make failed
         if (rc !== 0) {
