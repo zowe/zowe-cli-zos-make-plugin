@@ -19,7 +19,7 @@ import org.zowe.pipelines.nodejs.models.SemverLevel
  */
 def PRODUCT_NAME = "Zowe CLI"
 
-node('ca-jenkins-agent') {
+node('zowe-jenkins-agent') {
     // Initialize the pipeline
     def pipeline = new NodeJSPipeline(this)
 
@@ -50,7 +50,7 @@ node('ca-jenkins-agent') {
     ]
 
     // Initialize the pipeline library, should create 5 steps
-    pipeline.setup()
+    pipeline.setup(nodeJsVersion: 'v10.23.2')
 
     // Create a custom lint stage that runs immediately after the setup.
     pipeline.createStage(
@@ -113,10 +113,10 @@ node('ca-jenkins-agent') {
     //     testResults: [dir: "${INTEGRATION_TEST_ROOT}/jest-stare", files: "index.html", name: "${PRODUCT_NAME} - Integration Test Report"],
     //     junitOutput: INTEGRATION_JUNIT_OUTPUT,
     // )
-    
+
     // Check for vulnerabilities
     pipeline.checkVulnerabilities()
-    
+
     // Deploys the application if on a protected branch. Give the version input
     // 30 minutes before an auto timeout approve.
     pipeline.deploy(
