@@ -1,6 +1,6 @@
 {
   "name": "@zowe/zos-make-for-zowe-cli",
-  "version": "0.3.0-next-2021-0630145500",
+  "version": "0.3.0-next.20210630145500",
   "description": "A Zowe CLI plugin for building source on z/OS using make.",
   "repository": {
     "type": "git",
@@ -196,11 +196,11 @@
     "@zowe/imperative": ">=5.0.0-next <6.0.0",
     "env-cmd": "^8.0.2",
     "fs-extra": "^8.1.0",
-    "jest": "^24.3.1",
-    "jest-cli": "^24.3.1",
-    "jest-environment-node": "^24.3.1",
+    "jest": "^27.0.0",
+    "jest-cli": "^27.0.0",
+    "jest-environment-node": "^27.0.6",
     "jest-environment-node-debug": "^2.0.0",
-    "jest-html-reporter": "^2.5.0",
+    "jest-html-reporter": "^3.4.1",
     "jest-junit": "^6.3.0",
     "jest-stare": "^1.11.1",
     "ts-jest": "^27.0.3",
