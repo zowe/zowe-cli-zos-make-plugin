@@ -9,12 +9,13 @@
 *
 */
 
-import { ICommandHandler, IHandlerParameters, ImperativeError, IProfileLoaded, Imperative } from "@zowe/imperative";
-import { Files } from "../api/Files";
+import {
+    ConnectionPropsForSessCfg, ICommandHandler, IHandlerParameters, ImperativeError,
+    ISession, Session
+} from "@zowe/imperative";
 import { SshSession, ZosmfSession } from "@zowe/cli";
 import { HandlerUtils } from "./HandlerUtils";
 import { MsgConstants } from "./MsgConstants";
-import { Properties } from "../api/Properties";
 
 export default class MakeHandler implements ICommandHandler {
     private static readonly ERR_MSG: string = `Make failed`;
@@ -55,11 +56,19 @@ export default class MakeHandler implements ICommandHandler {
      * @param params Handler parameters.
      */
     private async performMake(params: IHandlerParameters) {
-        // Create the SSH session object
-        const zosmfLoadResp: IProfileLoaded = await Imperative.api.profileManager("zosmf").load({ name: Properties.get.zosmfProfile });
-        const zosmfSession = ZosmfSession.createBasicZosmfSession(zosmfLoadResp.profile);
-        const sshLoadResp: IProfileLoaded = await Imperative.api.profileManager("ssh").load({ name: Properties.get.sshProfile });
-        const sshSession = SshSession.createBasicSshSession(sshLoadResp.profile);
+        // create session for zosmf
+        let sessCfg: ISession = ZosmfSession.createSessCfgFromArgs(params.arguments);
+        let sessCfgWithCreds = await ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
+            sessCfg, params.arguments, {parms: params}
+        );
+        const zosmfSession = new Session(sessCfgWithCreds);
+
+        // create session for ssh
+        sessCfg = SshSession.createSshSessCfgFromArgs(params.arguments);
+        sessCfgWithCreds = await ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
+            sessCfg, params.arguments, {parms: params}
+        );
+        const sshSession = new SshSession(sessCfgWithCreds);
 
         // Perform make
         const rc = await HandlerUtils.make(zosmfSession, sshSession, this.mWrap, params.response.console, this.mMakeParms, this.mMaxConcurrent);

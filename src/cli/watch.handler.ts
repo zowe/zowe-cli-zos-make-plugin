@@ -9,7 +9,10 @@
 *
 */
 
-import { ICommandHandler, IHandlerParameters, IProfileLoaded, Imperative, IHandlerResponseApi, ImperativeError, TextUtils } from "@zowe/imperative";
+import {
+    ConnectionPropsForSessCfg, ICommandHandler, IHandlerParameters, IHandlerResponseApi,
+    Imperative, ISession, Session
+} from "@zowe/imperative";
 import { Files } from "../api/Files";
 import { ZosmfSession, Upload, SshSession } from "@zowe/cli";
 import { HandlerUtils } from "./HandlerUtils";
@@ -49,6 +52,31 @@ export default class WatchHandler implements ICommandHandler {
             this.mWrap = params.arguments.wrap;
             this.mConsole = params.response.console;
             this.mMakeParms = params.arguments.makeParms;
+
+            // create session for zosmf
+            let sessCfg: ISession = ZosmfSession.createSessCfgFromArgs(params.arguments);
+            ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
+                sessCfg, params.arguments, {parms: params}
+            ).then((zosmfSessCfgWithCreds: ISession) => {
+                this.mZosmfSession = new Session(zosmfSessCfgWithCreds);
+
+                // create session for ssh
+                sessCfg = SshSession.createSshSessCfgFromArgs(params.arguments);
+                ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
+                    sessCfg, params.arguments, {parms: params}
+                ).then((sshSessCfgWithCreds: ISession) => {
+                    this.mSshSession = new SshSession(sshSessCfgWithCreds);
+
+                    this.consoleInfoMsg(`Watching src for changes...`);
+                    this.watchSrc();
+                }).catch((err) => {
+                    reject(err);
+                });
+            }).catch((err) => {
+                reject(err);
+            });
+
+            /* zzz
             Imperative.api.profileManager("zosmf").load({ name: Properties.get.zosmfProfile })
                 .then((zosmfLoadResp: IProfileLoaded) => {
                     this.mZosmfSession = ZosmfSession.createBasicZosmfSession(zosmfLoadResp.profile);
@@ -62,6 +90,7 @@ export default class WatchHandler implements ICommandHandler {
                 }).catch((err) => {
                     reject(err);
                 });
+            zzz */
         });
     }
 

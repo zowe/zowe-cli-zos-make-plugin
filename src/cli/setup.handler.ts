@@ -10,13 +10,8 @@
 */
 
 import {
-    ICommandHandler,
-    IHandlerParameters,
-    Imperative,
-    IProfileLoaded,
-    ITaskWithStatus,
-    TaskStage,
-    TaskProgress
+    ConnectionPropsForSessCfg, ICommandHandler, IHandlerParameters, ISession,
+    ITaskWithStatus, Session, TaskStage, TaskProgress
 } from "@zowe/imperative";
 import { Files } from "../api/Files";
 import { ZosmfSession, SshSession } from "@zowe/cli";
@@ -38,10 +33,20 @@ export default class SetupHandler implements ICommandHandler {
         // Start the progress bar and load the profiles/create sessions
         const task: ITaskWithStatus = { percentComplete: 0, statusMessage: "Loading profiles", stageName: TaskStage.IN_PROGRESS };
         params.response.progress.startBar({ task });
-        const zosmfLoadResp: IProfileLoaded = await Imperative.api.profileManager("zosmf").load({ name: Properties.get.zosmfProfile });
-        const sshLoadResp: IProfileLoaded = await Imperative.api.profileManager("ssh").load({ name: Properties.get.sshProfile });
-        const zosmfSession = ZosmfSession.createBasicZosmfSession(zosmfLoadResp.profile);
-        const sshSession = SshSession.createBasicSshSession(sshLoadResp.profile);
+
+        // create session for zosmf
+        let sessCfg: ISession = ZosmfSession.createSessCfgFromArgs(params.arguments);
+        let sessCfgWithCreds = await ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
+            sessCfg, params.arguments, {parms: params}
+        );
+        const zosmfSession = new Session(sessCfgWithCreds);
+
+        // create session for ssh
+        sessCfg = SshSession.createSshSessCfgFromArgs(params.arguments);
+        sessCfgWithCreds = await ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
+            sessCfg, params.arguments, {parms: params}
+        );
+        const sshSession = new SshSession(sessCfgWithCreds);
 
         // Create the ZFS
         task.percentComplete = TaskProgress.TWENTY_PERCENT;
