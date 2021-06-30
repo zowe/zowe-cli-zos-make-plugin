@@ -178,8 +178,8 @@
   },
   "dependencies": {
     "chokidar": "3.0.0",
-    "handlebars": "4.7.2",
-    "mkdirp": "0.5.1",
+    "handlebars": "^4.7.7",
+    "mkdirp": "^0.5.5",
     "rimraf": "2.6.3",
     "word-wrap": "1.2.3"
   },
@@ -203,7 +203,7 @@
     "jest-html-reporter": "^2.5.0",
     "jest-junit": "^6.3.0",
     "jest-stare": "^1.11.1",
-    "ts-jest": "^24.0.0",
+    "ts-jest": "^27.0.3",
     "ts-node": "^7.0.1",
     "tslint": "^5.0.0",
     "typedoc": "^0.16.2",
