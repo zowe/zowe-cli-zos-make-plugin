@@ -10,10 +10,10 @@
 */
 
 import {
-    ConnectionPropsForSessCfg, ICommandHandler, IHandlerParameters, ISession,
-    ITaskWithStatus, TaskStage, Session, TaskProgress
+    ICommandHandler, IHandlerParameters, ITaskWithStatus, TaskStage, TaskProgress
 } from "@zowe/imperative";
 import { ZosmfSession, Delete } from "@zowe/cli";
+import { Utils } from "../api/Utils";
 import { Zfs } from "../api/Zfs";
 import { DataSet } from "../api/DataSet";
 import { Properties } from "../api/Properties";
@@ -35,11 +35,7 @@ export default class CleanupHandler implements ICommandHandler {
         };
         params.response.progress.startBar({ task: status });
 
-        const sessCfg: ISession = ZosmfSession.createSessCfgFromArgs(params.arguments);
-        const sessCfgWithCreds = await ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
-            sessCfg, params.arguments, {parms: params}
-        );
-        const zosmfSession = new Session(sessCfgWithCreds);
+        const zosmfSession = await Utils.createZosmfSession();
 
         // Unmount the data-set
         status.percentComplete = TaskProgress.FOURTY_PERCENT;

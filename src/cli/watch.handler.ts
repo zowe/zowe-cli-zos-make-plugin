@@ -10,10 +10,10 @@
 */
 
 import {
-    ConnectionPropsForSessCfg, ICommandHandler, IHandlerParameters, IHandlerResponseApi,
-    Imperative, ISession, Session
+    ICommandHandler, IHandlerParameters, IHandlerResponseApi, Session
 } from "@zowe/imperative";
 import { Files } from "../api/Files";
+import { Utils } from "../api/Utils";
 import { ZosmfSession, Upload, SshSession } from "@zowe/cli";
 import { HandlerUtils } from "./HandlerUtils";
 import { Properties } from "../api/Properties";
@@ -54,18 +54,12 @@ export default class WatchHandler implements ICommandHandler {
             this.mMakeParms = params.arguments.makeParms;
 
             // create session for zosmf
-            let sessCfg: ISession = ZosmfSession.createSessCfgFromArgs(params.arguments);
-            ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
-                sessCfg, params.arguments, {parms: params}
-            ).then((zosmfSessCfgWithCreds: ISession) => {
-                this.mZosmfSession = new Session(zosmfSessCfgWithCreds);
+            Utils.createZosmfSession().then((zosmfSess: Session) => {
+                this.mZosmfSession = zosmfSess;
 
                 // create session for ssh
-                sessCfg = SshSession.createSshSessCfgFromArgs(params.arguments);
-                ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
-                    sessCfg, params.arguments, {parms: params}
-                ).then((sshSessCfgWithCreds: ISession) => {
-                    this.mSshSession = new SshSession(sshSessCfgWithCreds);
+                Utils.createSshSession().then((sshSess: SshSession) => {
+                    this.mSshSession = sshSess;
 
                     this.consoleInfoMsg(`Watching src for changes...`);
                     this.watchSrc();
@@ -75,22 +69,6 @@ export default class WatchHandler implements ICommandHandler {
             }).catch((err) => {
                 reject(err);
             });
-
-            /* zzz
-            Imperative.api.profileManager("zosmf").load({ name: Properties.get.zosmfProfile })
-                .then((zosmfLoadResp: IProfileLoaded) => {
-                    this.mZosmfSession = ZosmfSession.createBasicZosmfSession(zosmfLoadResp.profile);
-                    Imperative.api.profileManager("ssh").load({ name: Properties.get.sshProfile }).then((sshLoadResp: IProfileLoaded) => {
-                        this.mSshSession = SshSession.createBasicSshSession(sshLoadResp.profile);
-                        this.consoleInfoMsg(`Watching src for changes...`);
-                        this.watchSrc();
-                    }).catch((err) => {
-                        reject(err);
-                    });
-                }).catch((err) => {
-                    reject(err);
-                });
-            zzz */
         });
     }
 

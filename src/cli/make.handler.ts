@@ -10,10 +10,9 @@
 */
 
 import {
-    ConnectionPropsForSessCfg, ICommandHandler, IHandlerParameters, ImperativeError,
-    ISession, Session
+    ICommandHandler, IHandlerParameters, ImperativeError
 } from "@zowe/imperative";
-import { SshSession, ZosmfSession } from "@zowe/cli";
+import { Utils } from "../api/Utils";
 import { HandlerUtils } from "./HandlerUtils";
 import { MsgConstants } from "./MsgConstants";
 
@@ -56,19 +55,9 @@ export default class MakeHandler implements ICommandHandler {
      * @param params Handler parameters.
      */
     private async performMake(params: IHandlerParameters) {
-        // create session for zosmf
-        let sessCfg: ISession = ZosmfSession.createSessCfgFromArgs(params.arguments);
-        let sessCfgWithCreds = await ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
-            sessCfg, params.arguments, {parms: params}
-        );
-        const zosmfSession = new Session(sessCfgWithCreds);
-
-        // create session for ssh
-        sessCfg = SshSession.createSshSessCfgFromArgs(params.arguments);
-        sessCfgWithCreds = await ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
-            sessCfg, params.arguments, {parms: params}
-        );
-        const sshSession = new SshSession(sessCfgWithCreds);
+        // create required sessions
+        const zosmfSession = await Utils.createZosmfSession();
+        const sshSession = await Utils.createSshSession();
 
         // Perform make
         const rc = await HandlerUtils.make(zosmfSession, sshSession, this.mWrap, params.response.console, this.mMakeParms, this.mMaxConcurrent);

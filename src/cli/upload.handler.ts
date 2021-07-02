@@ -10,11 +10,11 @@
 */
 
 import {
-    ConnectionPropsForSessCfg, ICommandHandler, IHandlerParameters, ImperativeError,
-    ITaskWithStatus, ISession, Session, TaskStage
+    ICommandHandler, IHandlerParameters, ImperativeError, ITaskWithStatus, TaskStage
 } from "@zowe/imperative";
-import { Upload, ZosmfSession } from "@zowe/cli";
+import { Upload } from "@zowe/cli";
 import { Files } from "../api/Files";
+import { Utils } from "../api/Utils";
 import * as path from "path";
 import { Properties } from "../api/Properties";
 import { Zfs } from "../api/Zfs";
@@ -37,12 +37,7 @@ export default class UploadHandler implements ICommandHandler {
         };
         params.response.progress.startBar({task: status});
 
-        // create session for zosmf
-        const sessCfg: ISession = ZosmfSession.createSessCfgFromArgs(params.arguments);
-        const sessCfgWithCreds = await ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
-            sessCfg, params.arguments, {parms: params}
-        );
-        const zosmfSession = new Session(sessCfgWithCreds);
+        const zosmfSession = await Utils.createZosmfSession();
 
         // Make sure that its mounted.
         if (!(await Zfs.isMounted(zosmfSession, Properties.get.zfs.name, Properties.get.remoteProjectRoot))) {

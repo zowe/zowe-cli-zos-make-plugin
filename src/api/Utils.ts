@@ -10,6 +10,9 @@
 */
 
 import * as Handlebars from "handlebars";
+import { Properties } from "../api/Properties";
+import { Imperative, IProfileLoaded, ISession, Session } from "@zowe/imperative";
+import { SshSession } from "@zowe/cli";
 
 export class Utils {
     /**
@@ -50,5 +53,59 @@ export class Utils {
             return r.then(() => enqueue());
         };
         return enqueue().then(() => Promise.all(ret));
+    }
+
+    /**
+     * Create a zosmf session from profile properties.
+     * @returns A zosmf session
+     */
+    public static async createZosmfSession(): Promise<Session> {
+        // Todo:
+        // This plugin does not define its connection properties as command line
+        // arguments (as is the Zowe convention). So createSessCfgFromArgs
+        // does not pick up values from the profile. We should define command-
+        // line arguments, but for now, we just use profileManager.load
+        // to get the needed properties and put them into sessCfg by hand.
+        // Once command-line args are defined:
+        //      - Add a parmaeter (like cmdHndlrParms: IHandlerParameters) to this function.
+        //      - Then the following code can be used instead:
+        //
+        // const sessCfg: ISession = ZosmfSession.createSessCfgFromArgs(cmdHndlrParms.arguments);
+        // const sessCfgWithCreds = await ConnectionPropsForSessCfg.addPropsOrPrompt<ISession>(
+        //    sessCfg, cmdHndlrParms.arguments, {parms: cmdHndlrParms, doPrompting: false}
+        // );
+        // return new Session(sessCfgWithCreds);
+
+        const profMgrLoad: IProfileLoaded = await Imperative.api.profileManager("zosmf")
+            .load({ name: Properties.get.zosmfProfile });
+        const sessCfg: ISession = {};
+        sessCfg.hostname           = profMgrLoad.profile.host;
+        sessCfg.port               = profMgrLoad.profile.port;
+        sessCfg.user               = profMgrLoad.profile.user;
+        sessCfg.password           = profMgrLoad.profile.password;
+        sessCfg.rejectUnauthorized = profMgrLoad.profile.rejectUnauthorized;
+        sessCfg.protocol           = profMgrLoad.profile.protocol;
+        sessCfg.type               = "basic";
+        return new Session(sessCfg);
+    }
+
+    /**
+     * Create a SSH session from profile properties.
+     * @returns A zosmf session
+     */
+    public static async createSshSession(): Promise<SshSession> {
+        // Todo: See Todo from createZosmfSession.
+        // Use SshSession.createSshSessCfgFromArgs instead.
+        const profMgrLoad: IProfileLoaded = await Imperative.api.profileManager("ssh")
+            .load({ name: Properties.get.sshProfile });
+        const sessCfg: ISession = {};
+        sessCfg.hostname           = profMgrLoad.profile.host;
+        sessCfg.port               = profMgrLoad.profile.port;
+        sessCfg.user               = profMgrLoad.profile.user;
+        sessCfg.password           = profMgrLoad.profile.password;
+        sessCfg.rejectUnauthorized = profMgrLoad.profile.rejectUnauthorized;
+        sessCfg.protocol           = profMgrLoad.profile.protocol;
+        sessCfg.type               = "basic";
+        return new SshSession(sessCfg);
     }
 }
