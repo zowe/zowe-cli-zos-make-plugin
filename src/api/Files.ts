@@ -10,7 +10,6 @@
 */
 
 import * as fs from "fs";
-import { IZosMakeProperties } from "./interfaces/IZosMakeProperties";
 const mkdirp = require("mkdirp");
 import * as path from "path";
 import { ImperativeError } from "@zowe/imperative";

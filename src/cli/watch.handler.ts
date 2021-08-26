@@ -9,7 +9,7 @@
 *
 */
 
-import { ICommandHandler, IHandlerParameters, IProfileLoaded, Imperative, IHandlerResponseApi, ImperativeError, TextUtils } from "@zowe/imperative";
+import { ICommandHandler, IHandlerParameters, IProfileLoaded, Imperative, IHandlerResponseApi } from "@zowe/imperative";
 import { Files } from "../api/Files";
 import { ZosmfSession, Upload, SshSession } from "@zowe/cli";
 import { HandlerUtils } from "./HandlerUtils";
@@ -29,7 +29,7 @@ export default class WatchHandler implements ICommandHandler {
     private mConsole: IHandlerResponseApi["console"];
 
     // The wrap column for output text
-    private mWrap: number = 120;
+    private readonly mWrap: number = 120;
 
     // The input copy parameter.
     private mCopy: boolean = false;
