@@ -29,7 +29,7 @@ export default class WatchHandler implements ICommandHandler {
     private mConsole: IHandlerResponseApi["console"];
 
     // The wrap column for output text
-    private readonly mWrap: number = 120;
+    private mWrap: number = 120;  // eslint-disable-line @typescript-eslint/no-magic-numbers
 
     // The input copy parameter.
     private mCopy: boolean = false;

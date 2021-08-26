@@ -14,10 +14,10 @@ import {ICommandHandler, IHandlerParameters, Logger} from "@zowe/imperative";
 export default class HealthHandler implements ICommandHandler {
 
     /**
-   * This was added to satisfy the warning checks for plugins.
-   * It does nothing at the moment.
-   * @param params
-   */
+     * This was added to satisfy the warning checks for plugins.
+     * It does nothing at the moment.
+     * @param params
+     */
     public async process(params: IHandlerParameters): Promise<void> {
         Logger.getImperativeLogger().debug("Invoked health check handler");
     }
