@@ -118,11 +118,24 @@ node('zowe-jenkins-agent') {
     // Check for vulnerabilities
     pipeline.checkVulnerabilities()
 
+    // Check that the changelog has been updated
+    pipeline.checkChangelog(
+        file: "CHANGELOG.md",
+        header: "## Recent Changes"
+    )
+
+    // Perform the versioning email mechanism
+    pipeline.version(
+        timeout: [time: 30, unit: 'MINUTES'],
+        updateChangelogArgs: [
+            file: "CHANGELOG.md",
+            header: "## Recent Changes"
+        ]
+    )
+
     // Deploys the application if on a protected branch. Give the version input
     // 30 minutes before an auto timeout approve.
-    pipeline.deploy(
-        versionArguments: [timeout: [time: 30, unit: 'MINUTES']]
-    )
+    pipeline.deploy()
 
     // Once called, no stages can be added and all added stages will be executed. On completion
     // appropriate emails will be sent out by the shared library.

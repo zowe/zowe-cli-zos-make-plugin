@@ -33,7 +33,7 @@ export class Utils {
      * @param iteratorFn - the function that turns an entry in the array into a promise
      */
     public static asyncPool(poolLimit: number, array: any[],
-                            iteratorFn: (item: any, array: any[]) => Promise<any>): Promise<any> {
+        iteratorFn: (item: any, array: any[]) => Promise<any>): Promise<any> {
         let i = 0;
         const ret: any[] = [];
         const executing: any[] = [];

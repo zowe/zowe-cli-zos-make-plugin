@@ -9,15 +9,7 @@
 *
 */
 
-import { Files } from "./Files";
-import {
-    SubmitJobs,
-    IJob,
-    List,
-    IZosFilesResponse,
-    ZosmfSession,
-    ZosmfRestClient
-} from "@zowe/cli";
+import { List, IZosFilesResponse, ZosmfSession, ZosmfRestClient } from "@zowe/cli";
 import { ImperativeExpect } from "@zowe/imperative";
 import { IDatasetAttributes } from "./interfaces/IDatasetAttributes";
 
