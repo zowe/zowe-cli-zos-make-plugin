@@ -20,7 +20,7 @@ import { DataSet } from "../api/DataSet";
 import { Properties } from "../api/Properties";
 
 export default class SetupHandler implements ICommandHandler {
-    public static SIXTY_PERCENT: number = 60;
+    public static SIXTY_PERCENT: number = 60;  // eslint-disable-line @typescript-eslint/no-magic-numbers
 
     /**
      * Performs project setup on z/OS by creating project directories on USS,

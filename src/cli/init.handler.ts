@@ -156,8 +156,6 @@ export default class InitHandler implements ICommandHandler {
             params.response.console.log(`\nProperties written to "${Properties.path}"`);
             params.response.console.log(`Review the properties file to ensure correctness.`);
             params.response.console.log(`Run "zowe zos-make setup" to create the z/OS environment.`);
-        } catch (e) {
-            throw e;
         } finally {
             // Close the readline
             rl.close();

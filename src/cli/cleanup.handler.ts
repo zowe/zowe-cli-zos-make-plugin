@@ -12,7 +12,7 @@
 import {
     ICommandHandler, IHandlerParameters, ITaskWithStatus, TaskStage, TaskProgress
 } from "@zowe/imperative";
-import { ZosmfSession, Delete } from "@zowe/cli";
+import { Delete } from "@zowe/cli";
 import { Utils } from "../api/Utils";
 import { Zfs } from "../api/Zfs";
 import { DataSet } from "../api/DataSet";

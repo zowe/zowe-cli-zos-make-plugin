@@ -17,7 +17,7 @@ import { Utils } from "./Utils";
 
 export class Uss {
     // Hard coded max to speed up the retrieve, but not overload with TSO address spaces
-    public static MaxConcurrentDownloads: number = 6;
+    public static MaxConcurrentDownloads: number = 6;  // eslint-disable-line @typescript-eslint/no-magic-numbers
 
     // List of directories that should never be rm. Used as a "just in case" check
     public static INVALID_RM_DIRS: string[] = [

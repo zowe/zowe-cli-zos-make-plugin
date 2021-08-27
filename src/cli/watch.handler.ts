@@ -14,9 +14,8 @@ import {
 } from "@zowe/imperative";
 import { Files } from "../api/Files";
 import { Utils } from "../api/Utils";
-import { ZosmfSession, Upload, SshSession } from "@zowe/cli";
+import { Upload, SshSession } from "@zowe/cli";
 import { HandlerUtils } from "./HandlerUtils";
-import { Properties } from "../api/Properties";
 import { MsgConstants } from "./MsgConstants";
 const Wrap = require("word-wrap");
 
@@ -32,7 +31,7 @@ export default class WatchHandler implements ICommandHandler {
     private mConsole: IHandlerResponseApi["console"];
 
     // The wrap column for output text
-    private mWrap: number = 120;
+    private mWrap: number = 120;  // eslint-disable-line @typescript-eslint/no-magic-numbers
 
     // The input copy parameter.
     private mCopy: boolean = false;
