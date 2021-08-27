@@ -10,7 +10,6 @@
 */
 
 import { ICommandHandler, IHandlerParameters, ImperativeError, IProfileLoaded, Imperative } from "@zowe/imperative";
-import { Files } from "../api/Files";
 import { SshSession, ZosmfSession } from "@zowe/cli";
 import { HandlerUtils } from "./HandlerUtils";
 import { MsgConstants } from "./MsgConstants";
@@ -20,7 +19,7 @@ export default class MakeHandler implements ICommandHandler {
     private static readonly ERR_MSG: string = `Make failed`;
 
     // The wrap column for output text
-    private mWrap: number = 120;
+    private mWrap: number = 120;  // eslint-disable-line @typescript-eslint/no-magic-numbers
 
     // Additional parameters for make passed from the commandline.
     private mMakeParms: string;
