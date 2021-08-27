@@ -1,6 +1,6 @@
 {
   "name": "@zowe/zos-make-for-zowe-cli",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A Zowe CLI plugin for building source on z/OS using make.",
   "repository": {
     "type": "git",
