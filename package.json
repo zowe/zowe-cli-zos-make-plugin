@@ -212,7 +212,7 @@
     "jest-stare": "^2.2.0",
     "ts-jest": "^24.0.0",
     "ts-node": "^7.0.1",
-    "typedoc": "^0.16.2",
+    "typedoc": "^0.23.21",
     "typescript": "^3.8.0",
     "uuid": "^3.2.1"
   },
