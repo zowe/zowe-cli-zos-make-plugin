@@ -16,6 +16,7 @@ import { HandlerUtils } from "./HandlerUtils";
 import { Properties } from "../api/Properties";
 import { MsgConstants } from "./MsgConstants";
 const Wrap = require("word-wrap");
+const chokidar = require("chokidar");
 
 export default class WatchHandler implements ICommandHandler {
 
@@ -69,7 +70,6 @@ export default class WatchHandler implements ICommandHandler {
      * Establish the watcher on the all the source
      */
     private watchSrc() {
-        const chokidar = require("chokidar");
         const watcher = chokidar.watch(Files.localSrcDir, {
             persistent: true,
             ignoreInitial: true
