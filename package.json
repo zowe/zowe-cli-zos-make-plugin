@@ -179,7 +179,7 @@
     ]
   },
   "dependencies": {
-    "chokidar": "3.0.0",
+    "chokidar": "3.5.3",
     "handlebars": "4.7.7",
     "mkdirp": "0.5.5",
     "rimraf": "2.6.3",
