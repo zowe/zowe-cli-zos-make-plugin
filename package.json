@@ -183,7 +183,7 @@
     "handlebars": "4.7.7",
     "mkdirp": "0.5.5",
     "rimraf": "2.6.3",
-    "word-wrap": "1.2.3"
+    "word-wrap": "1.2.4"
   },
   "peerDependencies": {
     "@zowe/cli": "^6.0.0",
